@@ -2,6 +2,7 @@ use log::{debug, error, info};
 
 use anyhow::Context;
 use anyhow::Result;
+use memchr::memmem;
 use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 use tokio::net::TcpStream;
 
@@ -50,6 +51,7 @@ where
     R: AsyncRead + Unpin,
     W: AsyncWrite + Unpin,
 {
+    let finder_starttls = memmem::Finder::new(NEEDL_STARTTLS);
     let mut buf = Vec::new();
 
     loop {
@@ -60,7 +62,7 @@ where
         }
         if lb > 0 && lb < 1024 {
             if buf.is_ascii() {
-                if let Some(i) = twoway::find_bytes(&buf, NEEDL_STARTTLS) {
+                if let Some(i) = finder_starttls.find(buf.as_slice()) {
                     info(direction, &buf);
                     debug!("strip 'STARTTLS'");
                     // TODO(refactor) into a trait method like
