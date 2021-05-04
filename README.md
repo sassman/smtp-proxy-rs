@@ -1,4 +1,4 @@
-# SMTP proxy demo
+# SMTP STRIPTLS proxy demo
 > demo for a smtp STRIPTLS attack, runs as smtp proxy server, written in rust
 
 ## Getting started
