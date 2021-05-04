@@ -38,7 +38,6 @@ async fn main() -> Result<()> {
                 .long("server")
                 .takes_value(true)
                 .required(true)
-                .default_value("smtp.web.de")
                 .help("remote smtp server address (name or ip)"),
         )
         .arg(
@@ -71,7 +70,7 @@ async fn main() -> Result<()> {
 
     let local_addr = format!("0.0.0.0:{}", matches.value_of("local-port").unwrap());
     let listener = TcpListener::bind(&local_addr).await?;
-    debug!("listening local: {}", local_addr);
+    info!("listening on: {:?}", local_addr);
     loop {
         let (stream, _) = listener.accept().await?;
         let remote_addr = remote_addr.clone();
